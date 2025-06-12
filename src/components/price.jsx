@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image, Dimensions} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 const { width } = Dimensions.get('window');
@@ -50,14 +50,11 @@ const PriceScreen = () => {
       
       {/* Encabezado */}
       <View style={styles.header}>
-        <Text style={styles.time}>9:41</Text>
         <Text style={styles.title}>Mochocoin</Text>
-        <TouchableOpacity>
-          <Image 
-            source={require('./assets/search.png')} 
+        <Image 
+            source={require('../icon/search.png')}
             style={styles.icon} 
           />
-        </TouchableOpacity>
       </View>
       
       {/* Pestañas */}
