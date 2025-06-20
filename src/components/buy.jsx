@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, ScrollView, StatusBar, Dimensions, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, ScrollView, StatusBar, Dimensions, Keyboard, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
@@ -38,10 +38,24 @@ const BuyMochocoinScreen = () => {
       
       {/* Encabezado */}
       <View style={styles.header}>
-        <Text style={styles.title}>Mochocoin</Text>
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Mochocoin</Text>
+          <Text style={styles.subtitle}>MHC</Text>
+        </View>
+        <View style={styles.iconsContainer}>
+          <TouchableOpacity>
+            <Image 
+              source={require('../icon/search.png')}
+              style={styles.icon} 
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image 
+              source={require('../icon/bell.png')}
+              style={[styles.icon, styles.iconMargin]} 
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -74,7 +88,7 @@ const BuyMochocoinScreen = () => {
                 onChangeText={setAmount}
                 returnKeyType="done"
               />
-              <Text style={styles.currencySymbol}>M</Text>
+              <Text style={styles.currencySymbol}>Bs</Text>
             </View>
           </View>
           
@@ -111,32 +125,9 @@ const BuyMochocoinScreen = () => {
       >
         <Text style={styles.buyButtonText}>Comprar Mochocoin</Text>
       </TouchableOpacity>
-      
-      {/* Barra de navegación inferior */}
-      <View style={styles.bottomNav}>
-        <NavItem title="Inicio" isActive={false} icon="home" />
-        <NavItem title="Transacciones" isActive={false} icon="home" />
-        <NavItem title="Precio" isActive={true} icon="chart" />
-        <NavItem title="Historial" isActive={false} icon="history" />
-        <NavItem title="Usuario" isActive={false} icon="user" />
-      </View>
     </SafeAreaView>
   );
 };
-
-// Componente para ítem de navegación
-const NavItem = ({ title, isActive, icon }) => (
-  <View style={styles.navItem}>
-    <View style={[styles.navIcon, isActive && styles.activeNavIcon]}>
-      <Ionicons 
-        name={icon} 
-        size={24} 
-        color={isActive ? "#4CAF50" : "#A0A0A0"} 
-      />
-    </View>
-    <Text style={[styles.navText, isActive && styles.activeNavText]}>{title}</Text>
-  </View>
-);
 
 // Estilos
 const styles = StyleSheet.create({
@@ -150,17 +141,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#2D2D2D',
   },
-  time: {
-    color: '#A0A0A0',
-    fontSize: 16,
+  titleContainer: {
+    flexDirection: 'column',
   },
   title: {
     color: '#FFFFFF',
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
+  },
+  subtitle: {
+    color: '#A0A0A0',
+    fontSize: 16,
+    marginTop: 4,
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    tintColor: '#FFFFFF',
+  },
+  iconMargin: {
+    marginLeft: 15,
   },
   scrollContainer: {
     padding: 20,
@@ -291,48 +295,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 18,
     marginHorizontal: 20,
-    marginBottom: 80,
+    marginBottom: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buyButtonText: {
     color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: 'bold',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#1E1E1E',
-    paddingVertical: 15,
-    borderTopWidth: 1,
-    borderTopColor: '#2D2D2D',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  navItem: {
-    alignItems: 'center',
-    width: width / 4 - 20,
-  },
-  navIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  activeNavIcon: {
-    backgroundColor: '#2D2D2D',
-  },
-  navText: {
-    color: '#A0A0A0',
-    fontSize: 12,
-  },
-  activeNavText: {
-    color: '#4CAF50',
     fontWeight: 'bold',
   },
 });

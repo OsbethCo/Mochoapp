@@ -21,7 +21,7 @@ const PriceScreen = () => {
 
   // Datos de rendimiento
   const performanceData = [
-    { period: "34 Horas", value: "+0.31%" },
+    { period: "24 Horas", value: "+0.31%" },
     { period: "7 días", value: "+0.72%" },
     { period: "15 días", value: "+0.27%" },
     { period: "1 mes", value: "+0.15%" },
@@ -30,13 +30,13 @@ const PriceScreen = () => {
   // Otras criptomonedas
   const cryptoData = [
     { name: "Ethereum", symbol: "ETH/USD", price: "2.280,91", change: "+0.31%", isPositive: true },
-    { name: "Litecoin", symbol: "LTC", price: "90,39", change: "+2.99%", isPositive: true },
-    { name: "XRP", symbol: "XRP", price: "2,22", change: "-0.45%", isPositive: false },
+    { name: "Litecoin", symbol: "LTC/USD", price: "90,39", change: "+2.99%", isPositive: true },
+    { name: "XRP", symbol: "XRP/USD", price: "2,22", change: "-0.45%", isPositive: false },
   ];
 
   // Noticias
   const newsData = [
-    { id: 1, title: "Mechocoin Sube de Precio", time: "2024-01-15 14:30" },
+    { id: 1, title: "Mochocoin Sube de Precio", time: "2024-01-15 14:30" },
     { id: 2, title: "Estafa de Criptomonedas", time: "2024-01-15 15:30" },
     { id: 3, title: "Mochocoin la Mejor Criptomoneda", time: "2024-01-15 17:00" },
   ];
@@ -48,13 +48,28 @@ const PriceScreen = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#121212" />
       
-      {/* Encabezado */}
+      {/* Encabezado con subtítulo MHC */}
       <View style={styles.header}>
-        <Text style={styles.title}>Mochocoin</Text>
-        <Image 
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Mochocoin</Text>
+          <Text style={styles.subtitle}>MHC</Text>
+        </View>
+        <View style={styles.iconsContainer}>
+          <Image 
             source={require('../icon/search.png')}
             style={styles.icon} 
           />
+          <Image 
+            source={require('../icon/bell.png')}
+            style={[styles.icon, styles.iconMargin]} 
+          />
+        </View>
+      </View>
+
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.buyButton}>
+          <Text style={styles.buyButtonText}>+ Comprar</Text>
+        </TouchableOpacity>
       </View>
       
       {/* Pestañas */}
@@ -84,13 +99,15 @@ const PriceScreen = () => {
       <ScrollView contentContainerStyle={styles.content}>
         {activeTab === 'Estadísticas' && (
           <>
-            {/* Precio actual */}
+            {/* Precio actual con botón Comprar */}
             <View style={styles.priceCard}>
-              <Text style={styles.priceLabel}>Precio actual</Text>
-              <Text style={styles.priceValue}>5.50.000</Text>
-              <View style={styles.priceChange}>
-                <Text style={styles.positiveChange}>+2.789</Text>
-                <Text style={styles.positiveChange}>+7.63% Hoy</Text>
+              <View style={styles.priceInfo}>
+                <Text style={styles.priceLabel}>Precio actual</Text>
+                <Text style={styles.priceValue}>$50.000</Text>
+                <View style={styles.priceChange}>
+                  <Text style={styles.positiveChange}>+2.789</Text>
+                  <Text style={styles.positiveChange}>+7.63% Hoy</Text>
+                </View>
               </View>
             </View>
             
@@ -165,9 +182,8 @@ const PriceScreen = () => {
           <View style={styles.newsContainer}>
             {newsData.map((news) => (
               <View key={news.id} style={styles.newsCard}>
-                <Text style={styles.newsTime}>{news.time}</Text>
                 <Text style={styles.newsTitle}>{news.title}</Text>
-                <View style={styles.newsDivider} />
+                <Text style={styles.newsTime}>{news.time}</Text>
               </View>
             ))}
           </View>
@@ -177,49 +193,10 @@ const PriceScreen = () => {
           <View style={styles.infoContainer}>
             <Text style={styles.infoTitle}>Sobre Mochocoin</Text>
             <Text style={styles.infoText}>{mochocoinInfo}</Text>
-            
-            <View style={styles.statsCard}>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>5.50.000</Text>
-                <Text style={styles.statLabel}>Precio Actual</Text>
-              </View>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>+7.63%</Text>
-                <Text style={styles.statLabel}>Cambio 24h</Text>
-              </View>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>4.500M</Text>
-                <Text style={styles.statLabel}>Volumen 24h</Text>
-              </View>
-            </View>
-            
-            <Text style={styles.sectionTitle}>Características Clave</Text>
-            <View style={styles.featureList}>
-              <View style={styles.featureItem}>
-                <View style={styles.featureIcon}>
-                  <Text style={styles.iconText}>✓</Text>
-                </View>
-                <Text style={styles.featureText}>Estabilidad económica para Venezuela</Text>
-              </View>
-              <View style={styles.featureItem}>
-                <View style={styles.featureIcon}>
-                  <Text style={styles.iconText}>✓</Text>
-                </View>
-                <Text style={styles.featureText}>Alternativa digital al dólar</Text>
-              </View>
-              <View style={styles.featureItem}>
-                <View style={styles.featureIcon}>
-                  <Text style={styles.iconText}>✓</Text>
-                </View>
-                <Text style={styles.featureText}>Transacciones rápidas y seguras</Text>
-              </View>
-              <View style={styles.featureItem}>
-                <View style={styles.featureIcon}>
-                  <Text style={styles.iconText}>✓</Text>
-                </View>
-                <Text style={styles.featureText}>Bajas comisiones de transacción</Text>
-              </View>
-            </View>
+            <Image 
+              source={require('../icon/info.png')}
+              style={styles.logo} 
+            />
           </View>
         )}
       </ScrollView>
@@ -239,19 +216,29 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 10,
   },
-  time: {
-    color: '#A0A0A0',
-    fontSize: 16,
+  titleContainer: {
+    flexDirection: 'column',
   },
   title: {
     color: '#FFFFFF',
     fontSize: 24,
     fontWeight: 'bold',
   },
+  subtitle: {
+    color: '#A0A0A0',
+    fontSize: 16,
+    marginTop: 4,
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+  },
   icon: {
     width: 24,
     height: 24,
     tintColor: '#FFFFFF',
+  },
+  iconMargin: {
+    marginLeft: 15,
   },
   tabsContainer: {
     flexDirection: 'row',
@@ -285,8 +272,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1E1E',
     borderRadius: 16,
     padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  priceInfo: {
+    flex: 1,
   },
   priceLabel: {
     color: '#A0A0A0',
@@ -297,22 +289,29 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 36,
     fontWeight: 'bold',
+    marginBottom: 5,
   },
   priceChange: {
     flexDirection: 'row',
-    marginTop: 10,
   },
   positiveChange: {
     color: '#4CAF50',
     fontSize: 16,
     fontWeight: 'bold',
-    marginHorizontal: 10,
+    marginRight: 15,
   },
-  negativeChange: {
-    color: '#F44336',
+  buyButton: {
+    backgroundColor: '#4CAF50',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  buyButtonText: {
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
-    marginHorizontal: 10,
+    alignItems: 'center',
   },
   chartContainer: {
     backgroundColor: '#1E1E1E',
@@ -402,20 +401,15 @@ const styles = StyleSheet.create({
   newsCard: {
     paddingVertical: 15,
   },
-  newsTime: {
-    color: '#A0A0A0',
-    fontSize: 14,
-    marginBottom: 5,
-  },
   newsTitle: {
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '600',
+    marginBottom: 5,
   },
-  newsDivider: {
-    height: 1,
-    backgroundColor: '#2D2D2D',
-    marginTop: 15,
+  newsTime: {
+    color: '#A0A0A0',
+    fontSize: 14,
   },
   infoContainer: {
     backgroundColor: '#1E1E1E',
@@ -434,52 +428,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 20,
   },
-  statsCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#2D2D2D',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statValue: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  statLabel: {
-    color: '#A0A0A0',
-    fontSize: 14,
-  },
-  featureList: {
-    marginTop: 10,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  featureIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#4CAF50',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 15,
-  },
-  iconText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-  },
-  featureText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    flex: 1,
+  logo: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    marginTop: 20,
   },
 });
 
