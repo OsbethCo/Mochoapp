@@ -1,3 +1,3 @@
-import App from "./src/components/homescreen";
+import App from "./src/app/App"
 
 export default App;
