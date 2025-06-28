@@ -1,3 +1,6 @@
-import App from "./src/app/App"
+import React from 'react';
+import AppNavigator from '../Mochoapp/src/navigation/AppNavigator';
 
-export default App;
+export default function App() {
+  return <AppNavigator />;
+}
