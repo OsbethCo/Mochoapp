@@ -8,7 +8,7 @@ const homescreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Encabezado */}
         <View style={styles.header}>
-          <Text style={styles.greeting}>iHola Usuario!</Text>
+          <Text style={styles.greeting}>¡Hola Usuario!</Text>
           <Text style={styles.welcome}>Bienvenido a Mochocoin</Text>
         </View>
 
@@ -51,15 +51,6 @@ const homescreen = () => {
           isPositive={true}
         />
       </ScrollView>
-
-      {/* Barra de Navegación Inferior */}
-      <View style={styles.bottomNav}>
-        <NavItem title="Inicio" isActive={true} />
-        <NavItem title="Transacciones" />
-        <NavItem title="Precio" />
-        <NavItem title="Historial" />
-        <NavItem title="Usuario" />
-      </View>
     </SafeAreaView>
   );
 };
@@ -80,15 +71,6 @@ const CryptoItem = ({ name, amount, pair, change, isPositive }) => (
   </View>
 );
 
-// Componente para ítem de navegación
-const NavItem = ({ title, isActive = false }) => (
-  <View style={styles.navItem}>
-    <Text style={[styles.navText, isActive && styles.activeNavText]}>{title}</Text>
-    {isActive && <View style={styles.activeIndicator} />}
-  </View>
-);
-
-// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -162,36 +144,6 @@ const styles = StyleSheet.create({
   },
   negative: {
     color: '#F44336',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    borderTopWidth: 1,
-    borderTopColor: '#2D2D2D',
-    backgroundColor: '#1E1E1E',
-    paddingVertical: 15,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  navItem: {
-    alignItems: 'center',
-  },
-  navText: {
-    color: '#A0A0A0',
-    fontSize: 12,
-  },
-  activeNavText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-  activeIndicator: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: '#4CAF50',
-    marginTop: 5,
   },
 });
 
