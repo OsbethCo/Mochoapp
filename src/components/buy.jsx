@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, ScrollView, StatusBar, Dimensions, Keyboard, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 const BuyMochocoinScreen = () => {
+  const navigation = useNavigation();
   const [amount, setAmount] = useState('');
   const [selectedBank, setSelectedBank] = useState(null);
 
@@ -20,12 +22,12 @@ const BuyMochocoinScreen = () => {
       alert('Por favor ingresa la cantidad a comprar');
       return;
     }
-    
+
     if (!selectedBank) {
       alert('Por favor selecciona un banco');
       return;
     }
-    
+
     Keyboard.dismiss();
     alert(`Compra de ${amount} Mochocoin realizada con éxito usando ${selectedBank.name}`);
     setAmount('');
@@ -35,47 +37,40 @@ const BuyMochocoinScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#121212" />
-      
-      {/* Encabezado */}
+
+      {/* Encabezado con botón de volver */}
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+        </TouchableOpacity>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Mochocoin</Text>
           <Text style={styles.subtitle}>MHC</Text>
         </View>
         <View style={styles.iconsContainer}>
           <TouchableOpacity>
-            <Image 
-              source={require('../icon/search.png')}
-              style={styles.icon} 
-            />
+            <Image source={require('../icon/search.png')} style={styles.icon} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Image 
-              source={require('../icon/bell.png')}
-              style={[styles.icon, styles.iconMargin]} 
-            />
+            <Image source={require('../icon/bell.png')} style={[styles.icon, styles.iconMargin]} />
           </TouchableOpacity>
         </View>
       </View>
-      
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Saldo disponible */}
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceLabel}>Saldo Disponible</Text>
           <Text style={styles.balanceAmount}>4.500 M</Text>
         </View>
-        
-        {/* Sección de compra */}
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Comprar Mochocoin</Text>
-          
-          {/* Precio actual */}
+
           <View style={styles.priceContainer}>
             <Text style={styles.priceLabel}>Precio actual:</Text>
             <Text style={styles.priceValue}>0,50 Bs</Text>
           </View>
-          
-          {/* Cantidad a comprar */}
+
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Cantidad a Comprar</Text>
             <View style={styles.amountInputContainer}>
@@ -91,18 +86,14 @@ const BuyMochocoinScreen = () => {
               <Text style={styles.currencySymbol}>Bs</Text>
             </View>
           </View>
-          
-          {/* Bancos disponibles */}
+
           <Text style={styles.banksTitle}>Selecciona un banco</Text>
-          
+
           <View style={styles.banksGrid}>
             {banks.map((bank) => (
-              <TouchableOpacity 
+              <TouchableOpacity
                 key={bank.id}
-                style={[
-                  styles.bankCard, 
-                  selectedBank?.id === bank.id && styles.selectedBankCard
-                ]}
+                style={[styles.bankCard, selectedBank?.id === bank.id && styles.selectedBankCard]}
                 onPress={() => setSelectedBank(bank)}
               >
                 <Text style={styles.bankName}>{bank.name}</Text>
@@ -117,19 +108,14 @@ const BuyMochocoinScreen = () => {
           </View>
         </View>
       </ScrollView>
-      
-      {/* Botón de compra */}
-      <TouchableOpacity 
-        style={styles.buyButton}
-        onPress={handleBuy}
-      >
+
+      <TouchableOpacity style={styles.buyButton} onPress={handleBuy}>
         <Text style={styles.buyButtonText}>Comprar Mochocoin</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -139,7 +125,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
     paddingBottom: 10,
   },
   titleContainer: {
@@ -267,7 +254,6 @@ const styles = StyleSheet.create({
   },
   selectedBankCard: {
     borderColor: '#4CAF50',
-    backgroundColor: '#2D2D2D',
   },
   bankName: {
     color: '#FFFFFF',

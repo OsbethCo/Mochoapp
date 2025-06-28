@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Switch,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const PrivacySettingsScreen = () => {
+  const navigation = useNavigation();
+
   const [privacyToggles, setPrivacyToggles] = useState({
     pagos: false,
     gps: true,
@@ -24,15 +34,19 @@ const PrivacySettingsScreen = () => {
   return (
     <ScrollView style={styles.container}>
       {/* Botón regresar */}
-      <View style={styles.backRow}>
+      <TouchableOpacity
+        style={styles.backRow}
+        onPress={() => navigation.goBack()}
+      >
         <Ionicons name="chevron-back" size={24} color="#000" />
-      </View>
+        <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>Atrás</Text>
+      </TouchableOpacity>
 
       {/* PRIVACIDAD */}
       <Text style={styles.sectionTitle}>Privacidad</Text>
       <View style={styles.box}>
         <View style={styles.item}>
-          <Text style={styles.itemText}>Restriccion de pagos</Text>
+          <Text style={styles.itemText}>Restricción de pagos</Text>
           <Switch
             value={privacyToggles.pagos}
             onValueChange={() => togglePrivacy('pagos')}
@@ -41,7 +55,7 @@ const PrivacySettingsScreen = () => {
           />
         </View>
         <View style={styles.item}>
-          <Text style={styles.itemText}>Permitir ubicacion por GPS</Text>
+          <Text style={styles.itemText}>Permitir ubicación por GPS</Text>
           <Switch
             value={privacyToggles.gps}
             onValueChange={() => togglePrivacy('gps')}
@@ -50,7 +64,7 @@ const PrivacySettingsScreen = () => {
           />
         </View>
         <View style={styles.item}>
-          <Text style={styles.itemText}>Transferencias incognitos</Text>
+          <Text style={styles.itemText}>Transferencias incógnito</Text>
           <Switch
             value={privacyToggles.incognito}
             onValueChange={() => togglePrivacy('incognito')}
@@ -64,7 +78,7 @@ const PrivacySettingsScreen = () => {
       <Text style={styles.sectionTitle}>Seguridad</Text>
       <View style={styles.box}>
         <View style={styles.item}>
-          <Text style={styles.itemText}>Verificacion en dos pasos</Text>
+          <Text style={styles.itemText}>Verificación en dos pasos</Text>
           <Switch
             value={securityToggles.verificacion}
             onValueChange={() => toggleSecurity('verificacion')}
@@ -73,12 +87,18 @@ const PrivacySettingsScreen = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.item}>
-          <Text style={styles.itemText}>Agregar correo electronico</Text>
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => navigation.navigate('AddMailScreen')}
+        >
+          <Text style={styles.itemText}>Agregar correo electrónico</Text>
           <Ionicons name="chevron-forward" size={20} color="#00074F" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => navigation.navigate('ChangePasswScreen')}
+        >
           <Text style={styles.itemText}>Cambio de contraseña</Text>
           <Ionicons name="chevron-forward" size={20} color="#00074F" />
         </TouchableOpacity>
@@ -95,6 +115,8 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
   },
   sectionTitle: {

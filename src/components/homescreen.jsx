@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, StatusBar } from 'react-native';
 
-const App = () => {
+const homescreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="default" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Encabezado */}
         <View style={styles.header}>
@@ -195,4 +195,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default homescreen;

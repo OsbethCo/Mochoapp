@@ -6,25 +6,24 @@ const WelcomeScreen = () => {
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
   
-  // Paleta de colores adaptable al tema del dispositivo
   const colors = {
     light: {
       background: '#F5F5F5',
       text: '#333333',
-      buttonBg: '#4285F4',  // Azul
+      buttonBg: '#4285F4',
       buttonText: '#FFFFFF',
       cardBg: '#FFFFFF',
       cardBorder: '#E0E0E0',
-      iconTint: null // Sin tint en modo claro
+      iconTint: null
     },
     dark: {
       background: '#121212',
       text: '#E0E0E0',
-      buttonBg: '#6200EE',   // Morado
+      buttonBg: '#6200EE',
       buttonText: '#FFFFFF',
       cardBg: '#1E1E1E',
       cardBorder: '#333333',
-      iconTint: '#FFFFFF' // Tinte blanco en modo oscuro
+      iconTint: '#FFFFFF'
     }
   };
   
@@ -43,7 +42,6 @@ const WelcomeScreen = () => {
       }]}>
         <Text style={[styles.title, { color: theme.text }]}>¡Bienvenido!</Text>
         
-        {/* Icono centrado con margen */}
         <View style={styles.iconContainer}>
           <Image
             source={require('../assets/icon.png')}
@@ -55,7 +53,7 @@ const WelcomeScreen = () => {
         {/* Botón Iniciar sesión */}
         <TouchableOpacity 
           style={[styles.button, { backgroundColor: theme.buttonBg }]}
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.navigate('LogScreen')}
           activeOpacity={0.7}
         >
           <Text style={[styles.buttonText, { color: theme.buttonText }]}>Iniciar sesión</Text>
@@ -69,7 +67,7 @@ const WelcomeScreen = () => {
             borderColor: theme.buttonBg,
             marginTop: 16
           }]}
-          onPress={() => navigation.navigate('Register')}
+          onPress={() => navigation.navigate('Register2')}
           activeOpacity={0.7}
         >
           <Text style={[styles.buttonText, { color: theme.buttonBg }]}>Registrate</Text>
@@ -102,11 +100,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 20, // Reducido para coincidir con la imagen
+    marginBottom: 20,
     textAlign: 'center',
   },
   iconContainer: {
-    marginBottom: 30, // Espacio debajo del icono
+    marginBottom: 30,
   },
   icon: {
     width: 80,
@@ -117,7 +115,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
-    color: '#F59E0B'
   },
   buttonText: {
     fontSize: 16,

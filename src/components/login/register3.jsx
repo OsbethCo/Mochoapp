@@ -1,87 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Para ícono de ojo
 
-const PasswordConfirmationScreen = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+const VerificationScreen = () => {
+  const [code, setCode] = useState(['', '', '', '', '', '']);
+  const inputs = useRef(Array(6).fill(null));
+  const email = 'usuario@ejemplo.com'; // Reemplaza con el email dinámico si es necesario
 
-  const handleRegister = () => {
+  const handleCodeChange = (text, index) => {
+    const newCode = [...code];
+    newCode[index] = text;
+    setCode(newCode);
+
+    // Auto-focus al siguiente campo si se ingresó un dígito
+    if (text && index < 5 && inputs.current[index + 1]) {
+      inputs.current[index + 1].focus();
+    }
+  };
+
+  const handleResendCode = () => {
+    // Lógica para reenviar el código
+    alert(`Código reenviado a ${email}`);
+  };
+
+  const handleConfirm = () => {
     Keyboard.dismiss();
-    
-    if (!password || !confirmPassword) {
-      alert('Por favor completa ambos campos');
-      return;
+    const fullCode = code.join('');
+    if (fullCode.length === 6) {
+      alert(`Código confirmado: ${fullCode}`);
+    } else {
+      alert('Por favor, ingresa los 6 dígitos');
     }
-
-    if (password !== confirmPassword) {
-      alert('Las contraseñas no coinciden');
-      return;
-    }
-
-    alert('¡Registro exitoso!');
-    // Aquí iría la lógica para enviar los datos al backend
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.progress}>3 de 3</Text>
-      <Text style={styles.title}>Confirmación de contraseña</Text>
+      <Text style={styles.progress}>2 de 3</Text>
+      <Text style={styles.header}>Ingresa el código de confirmación</Text>
+      <Text style={styles.subheader}>Hemos enviado un código de 6 dígitos a {email}</Text>
 
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Contraseña</Text>
-        <View style={styles.passwordContainer}>
+      <View style={styles.codeContainer}>
+        {[0, 1, 2, 3, 4, 5].map((index) => (
           <TextInput
-            style={styles.input}
-            placeholder="Contraseña"
-            secureTextEntry={!showPassword}
-            value={password}
-            onChangeText={setPassword}
+            key={index}
+            ref={(el) => (inputs.current[index] = el)}
+            style={styles.codeInput}
+            maxLength={1}
+            keyboardType="numeric"
+            value={code[index]}
+            onChangeText={(text) => handleCodeChange(text, index)}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === 'Backspace' && !code[index] && index > 0) {
+                inputs.current[index - 1].focus();
+              }
+            }}
           />
-          <TouchableOpacity 
-            style={styles.eyeIcon}
-            onPress={() => setShowPassword(!showPassword)}
-          >
-            <Ionicons 
-              name={showPassword ? "eye-off" : "eye"} 
-              size={20} 
-              color="#666" 
-            />
-          </TouchableOpacity>
-        </View>
+        ))}
       </View>
 
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Confirmar contraseña</Text>
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Confirmar Contraseña"
-            secureTextEntry={!showConfirmPassword}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-          />
-          <TouchableOpacity 
-            style={styles.eyeIcon}
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-          >
-            <Ionicons 
-              name={showConfirmPassword ? "eye-off" : "eye"} 
-              size={20} 
-              color="#666" 
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-        <Text style={styles.registerButtonText}>Registrarse</Text>
+      <TouchableOpacity onPress={handleResendCode}>
+        <Text style={styles.resendText}>¿No recibiste el código? <Text style={styles.resendLink}>Reenviar código</Text></Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginLink}>
-        <Text style={styles.loginText}>¿Ya tienes una cuenta? <Text style={styles.loginLinkText}>Inicia sesión</Text></Text>
+      <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
+        <Text style={styles.confirmButtonText}>Confirmar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -98,59 +79,56 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 5,
   },
-  title: {
-    fontSize: 24,
+  header: {
+    fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  subheader: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 30,
+    color: '#666',
+  },
+  codeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 30,
   },
-  formGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-    color: '#333',
-  },
-  input: {
-    height: 50,
+  codeInput: {
+    width: 45,
+    height: 55,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    paddingHorizontal: 15,
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  resendText: {
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#666',
     fontSize: 16,
-    paddingRight: 40, // Espacio para el ícono
   },
-  passwordContainer: {
-    position: 'relative',
+  resendLink: {
+    fontWeight: 'bold',
+    color: '#007AFF',
   },
-  eyeIcon: {
-    position: 'absolute',
-    right: 15,
-    top: 15,
-  },
-  registerButton: {
+  confirmButton: {
     backgroundColor: '#007AFF',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
   },
-  registerButtonText: {
+  confirmButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },
-  loginLink: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  loginText: {
-    color: '#666',
-  },
-  loginLinkText: {
-    color: '#007AFF',
-    fontWeight: 'bold',
-  },
 });
 
-export default PasswordConfirmationScreen;
+export default VerificationScreen;

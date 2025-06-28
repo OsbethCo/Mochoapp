@@ -1,58 +1,80 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, useColorScheme, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const ConfirmPasswordScreen = () => {
+const PasswordConfirmScreen = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const colorScheme = useColorScheme();
+  const navigation = useNavigation();
+
+  const theme = {
+    light: {
+      background: '#fff',
+      text: '#333',
+      inputBorder: '#ccc',
+      buttonBg: '#F59E0B',
+      buttonText: '#fff',
+    },
+    dark: {
+      background: '#121212',
+      text: '#E0E0E0',
+      inputBorder: '#444',
+      buttonBg: '#F59E0B',
+      buttonText: '#fff',
+    },
+  }[colorScheme] || theme.light;
 
   const handleConfirm = () => {
-    // Handle password confirmation logic
     if (newPassword && confirmPassword && newPassword === confirmPassword) {
-      alert('Contraseña confirmada con éxito');
+      Alert.alert('Éxito', 'Contraseña confirmada con éxito');
+      navigation.navigate('HomeScreen');
     } else {
-      alert('Las contraseñas no coinciden');
+      Alert.alert('Error', 'Las contraseñas no coinciden');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Confirmar contraseña</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.header, { color: theme.text }]}>Confirmar contraseña</Text>
 
-      {/* Sección Nueva contraseña */}
+      {/* Nueva contraseña */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Nueva contraseña</Text>
-        <View style={styles.inputGroup}>
-        </View>
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={styles.input}
-            placeholder="Contraseña"
-            secureTextEntry
-            value={newPassword}
-            onChangeText={setNewPassword}
-          />
-        </View>
+        <Text style={[styles.sectionTitle, { color: theme.text }]}>Nueva contraseña</Text>
+        <TextInput
+          style={[
+            styles.input,
+            { borderColor: theme.inputBorder, color: theme.text },
+          ]}
+          placeholder="Contraseña"
+          placeholderTextColor={theme.text + '88'}
+          secureTextEntry
+          value={newPassword}
+          onChangeText={setNewPassword}
+        />
       </View>
 
-      {/* Sección Confirmar contraseña */}
+      {/* Confirmar contraseña */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Confirmar contraseña</Text>
-        <View style={styles.inputGroup}>
-        </View>
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={styles.input}
-            placeholder="Confirmar Contraseña"
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-          />
-        </View>
+        <Text style={[styles.sectionTitle, { color: theme.text }]}>Confirmar contraseña</Text>
+        <TextInput
+          style={[
+            styles.input,
+            { borderColor: theme.inputBorder, color: theme.text },
+          ]}
+          placeholder="Confirmar contraseña"
+          placeholderTextColor={theme.text + '88'}
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
       </View>
 
-      {/* Botón Confirmar */}
-      <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-        <Text style={styles.confirmButtonText}>Confirmar</Text>
+      <TouchableOpacity
+        style={[styles.confirmButton, { backgroundColor: theme.buttonBg }]}
+        onPress={handleConfirm}
+      >
+        <Text style={[styles.confirmButtonText, { color: theme.buttonText }]}>Confirmar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -62,7 +84,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 25,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
   },
   header: {
     fontSize: 24,
@@ -77,32 +99,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 15,
-    color: '#333',
-  },
-  inputGroup: {
-    marginBottom: 20,
   },
   input: {
     height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
     paddingHorizontal: 15,
     fontSize: 16,
-    paddingRight: 40,
   },
   confirmButton: {
-    backgroundColor: '#F59E0B',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   confirmButtonText: {
-    color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },
 });
 
-export default ConfirmPasswordScreen;
+export default PasswordConfirmScreen;
