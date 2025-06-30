@@ -89,7 +89,7 @@ const PrivacySettingsScreen = () => {
 
         <TouchableOpacity
           style={styles.item}
-          onPress={() => navigation.navigate('AddMailScreen')}
+          onPress={() => navigation.navigate('email')}
         >
           <Text style={styles.itemText}>Agregar correo electrónico</Text>
           <Ionicons name="chevron-forward" size={20} color="#00074F" />
@@ -97,7 +97,7 @@ const PrivacySettingsScreen = () => {
 
         <TouchableOpacity
           style={styles.item}
-          onPress={() => navigation.navigate('ChangePasswScreen')}
+          onPress={() => navigation.navigate('password')}
         >
           <Text style={styles.itemText}>Cambio de contraseña</Text>
           <Ionicons name="chevron-forward" size={20} color="#00074F" />

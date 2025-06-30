@@ -3,9 +3,9 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useColorScheme } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-// Importa pantallas principales
+// Importa tus pantallas
 import WelcomeScreen from '../components/register1';
 import RegisterScreen from '../components/login/register2';
 import VerificationScreen from '../components/login/register3';
@@ -26,6 +26,8 @@ import LanguageScreen from '../components/config/idioma';
 import PrivacySettingsScreen from '../components/config/privacidad';
 import NotificationsScreen from '../components/config/notificacionesyalertas';
 import HelpCenterScreen from '../components/config/centrodeayuda';
+import ChangePasswordScreen from '../components/config/changepassw';
+import EmailScreen from '../components/config/addmail';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -80,9 +82,11 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="MainTabs">
-        {/* Registro e inicio */}
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="WelcomeScreen">
+        {/* Pantalla de bienvenida */}
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+        
+        {/* Registro e inicio */}
         <Stack.Screen name="Register2" component={RegisterScreen} />
         <Stack.Screen name="Register3" component={VerificationScreen} />
         <Stack.Screen name="Register4" component={PasswordConfirmationScreen} />
@@ -90,15 +94,20 @@ const AppNavigator = () => {
         <Stack.Screen name="RecoverPassScreen" component={RecoverPassScreen} />
         <Stack.Screen name="CodConfirmScreen" component={CodConfirmScreen} />
         <Stack.Screen name="PasswordConfirmScreen" component={PasswordConfirmScreen} />
+        
         {/* Navegación principal con tabs */}
         <Stack.Screen name="MainTabs" component={MainTabs} />
+        
+        {/* Pantallas adicionales */}
         <Stack.Screen name="BuyScreen" component={BuyMochocoinScreen} />
-
+        
         {/* Pantallas de configuración */}
         <Stack.Screen name="notificacion" component={NotificationsScreen}/>
         <Stack.Screen name="idiomas" component={LanguageScreen}/>
         <Stack.Screen name="ayuda" component={HelpCenterScreen}/>
         <Stack.Screen name="privacidad" component={PrivacySettingsScreen}/>
+        <Stack.Screen name= "email" component={EmailScreen}/>
+        <Stack.Screen name= "password" component={ChangePasswordScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
