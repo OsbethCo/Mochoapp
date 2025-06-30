@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, SafeAreaView } from 'react-native';
 
-const VerificationScreen = () => {
+const VerificationScreen = ({navigation}) => {
   const [code, setCode] = useState(['', '', '', '', '', '']);
   const inputs = useRef(Array(6).fill(null));
   const email = 'usuario@ejemplo.com'; // Reemplaza con el email dinámico si es necesario
@@ -61,7 +61,7 @@ const VerificationScreen = () => {
         <Text style={styles.resendText}>¿No recibiste el código? <Text style={styles.resendLink}>Reenviar código</Text></Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
+      <TouchableOpacity style={styles.confirmButton} onPress={() => navigation.navigate('Register4')}>
         <Text style={styles.confirmButtonText}>Confirmar</Text>
       </TouchableOpacity>
     </View>
@@ -71,16 +71,18 @@ const VerificationScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 25,
+    padding: 90,
     backgroundColor: '#fff',
   },
   progress: {
-    fontSize: 14,
+    fontSize: 30,
     color: '#666',
-    marginBottom: 5,
+    marginBottom: 40,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
   header: {
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
@@ -115,10 +117,10 @@ const styles = StyleSheet.create({
   },
   resendLink: {
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#F59E0B',
   },
   confirmButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#F59E0B',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

@@ -3,14 +3,14 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 
 const flags = {
-  'Español': require('../icon/spain.png'),
-  'Aleman': require('../icon/germany.png'),
-  'Portugues': require('../icon/portugal.png'),
-  'Frances': require('../icon/france.png'),
-  'Italiano': require('../icon/italy.png'),
-  'Ingles(EEUU)': require('../icon/usa.png'),
-  'Japones': require('../icon/japan.png'),
-  'Ruso': require('../icon/russia.png'),
+  'Español': require('./flags/spain.png'),
+  'Aleman': require('./flags/germany.png'),
+  'Portugues': require('./flags/portugal.png'),
+  'Frances': require('./flags/france.png'),
+  'Italiano': require('./flags/italy.png'),
+  'Ingles(EEUU)': require('./flags/usa.png'),
+  'Japones': require('./flags/japan.png'),
+  'Ruso': require('./flags/russia.png'),
 };
 
 const LanguageScreen = () => {

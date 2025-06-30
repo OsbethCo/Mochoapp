@@ -19,14 +19,14 @@ const CodConfirmScreen = () => {
       background: '#FFFFFF',
       text: '#333',
       border: '#DDD',
-      primary: '#FFA500',
-      link: '#007BFF',
+      primary: '#F59E0B',
+      link: '#F59E0B',
     },
     dark: {
       background: '#121212',
       text: '#EEE',
       border: '#444',
-      primary: '#FFA500',
+      primary: '#F59E0B',
       link: '#66B2FF',
     },
   }[colorScheme] || theme.light;
@@ -109,13 +109,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
     marginBottom: 20,
   },

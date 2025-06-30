@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import {
+  View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity,
+  ScrollView, KeyboardAvoidingView, Platform, Keyboard, useColorScheme,
+} from 'react-native';
 
 const TransactionScreen = () => {
+  const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
+
   const [activeTab, setActiveTab] = useState('Comprar');
   const [buyAmount, setBuyAmount] = useState('');
   const [sellAmount, setSellAmount] = useState('');
@@ -9,7 +15,6 @@ const TransactionScreen = () => {
   const [recipient, setRecipient] = useState('');
   const [note, setNote] = useState('');
 
-  // Datos de bancos para compra/venta
   const banks = [
     { id: 1, name: 'BNC', price: '4.000 Bs' },
     { id: 2, name: 'Provincial', price: '4.050 Bs' },
@@ -17,87 +22,72 @@ const TransactionScreen = () => {
     { id: 4, name: 'Bancrocer', price: '4.000 Bs' },
   ];
 
-  // Manejar las transacciones
   const handleTransaction = () => {
     Keyboard.dismiss();
-    // Aquí iría la lógica de la transacción
     alert(`Transacción de ${activeTab} realizada con éxito!`);
-    
-    // Resetear formularios
-    if (activeTab === 'Comprar') setBuyAmount('');
-    if (activeTab === 'Vender') setSellAmount('');
-    if (activeTab === 'Enviar') {
-      setSendAmount('');
-      setRecipient('');
-      setNote('');
-    }
+    setBuyAmount('');
+    setSellAmount('');
+    setSendAmount('');
+    setRecipient('');
+    setNote('');
   };
+
+  const styles = getStyles(isDark);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Encabezado con hora simulada */}
       <View style={styles.header}>
         <Text style={styles.title}>Transacciones</Text>
       </View>
 
-      {/* Saldo disponible */}
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceLabel}>Saldo Disponible</Text>
         <Text style={styles.balanceAmount}>4.500 ₫</Text>
       </View>
 
-      {/* Pestañas de transacción */}
       <View style={styles.tabsContainer}>
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'Comprar' && styles.activeTab]}
-          onPress={() => setActiveTab('Comprar')}
-        >
-          <Text style={[styles.tabText, activeTab === 'Comprar' && styles.activeTabText]}>Comprar</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'Vender' && styles.activeTab]}
-          onPress={() => setActiveTab('Vender')}
-        >
-          <Text style={[styles.tabText, activeTab === 'Vender' && styles.activeTabText]}>Vender</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'Enviar' && styles.activeTab]}
-          onPress={() => setActiveTab('Enviar')}
-        >
-          <Text style={[styles.tabText, activeTab === 'Enviar' && styles.activeTabText]}>Enviar</Text>
-        </TouchableOpacity>
+        {['Comprar', 'Vender', 'Enviar'].map(tab => (
+          <TouchableOpacity
+            key={tab}
+            style={[styles.tab, activeTab === tab && styles.activeTab]}
+            onPress={() => setActiveTab(tab)}
+          >
+            <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+              {tab}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      {/* Contenido de las pestañas */}
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.contentContainer}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          {activeTab === 'Comprar' && (
+          {(activeTab === 'Comprar' || activeTab === 'Vender') && (
             <View style={styles.tabContent}>
-              <Text style={styles.tabTitle}>✔ Comprar Mochocoin</Text>
-              
+              <Text style={styles.tabTitle}>
+                ✔ {activeTab} Mochocoin
+              </Text>
               <Text style={styles.priceLabel}>Precio actual: 0,50 Bs</Text>
-              
+
               <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Cantidad a Comprar</Text>
+                <Text style={styles.inputLabel}>
+                  Cantidad a {activeTab}
+                </Text>
                 <TextInput
                   style={styles.input}
                   placeholder="0,00"
-                  placeholderTextColor="#A0A0A0"
+                  placeholderTextColor={isDark ? '#A0A0A0' : '#666'}
                   keyboardType="numeric"
-                  value={buyAmount}
-                  onChangeText={setBuyAmount}
+                  value={activeTab === 'Comprar' ? buyAmount : sellAmount}
+                  onChangeText={activeTab === 'Comprar' ? setBuyAmount : setSellAmount}
                 />
               </View>
-              
+
               <Text style={styles.banksTitle}>Bancos Disponibles</Text>
-              
               <View style={styles.banksGrid}>
-                {banks.map((bank) => (
+                {banks.map(bank => (
                   <View key={bank.id} style={styles.bankCard}>
                     <Text style={styles.bankName}>{bank.name}</Text>
                     <Text style={styles.bankPrice}>{bank.price}</Text>
@@ -106,71 +96,40 @@ const TransactionScreen = () => {
               </View>
             </View>
           )}
-          
-          {activeTab === 'Vender' && (
-            <View style={styles.tabContent}>
-              <Text style={styles.tabTitle}>✔ Vender Mochocoin</Text>
-              
-              <Text style={styles.balanceInfo}>Saldo Disponible: 4.500 ₫</Text>
-              
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Cantidad a Vender</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="0,00"
-                  placeholderTextColor="#A0A0A0"
-                  keyboardType="numeric"
-                  value={sellAmount}
-                  onChangeText={setSellAmount}
-                />
-              </View>
-              
-              <Text style={styles.banksTitle}>Bancos Disponibles</Text>
-              
-              <View style={styles.banksGrid}>
-                {banks.map((bank) => (
-                  <View key={bank.id} style={styles.bankCard}>
-                    <Text style={styles.bankName}>{bank.name}</Text>
-                    <Text style={styles.bankPrice}>{bank.price}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          )}
-          
+
           {activeTab === 'Enviar' && (
             <View style={styles.tabContent}>
               <Text style={styles.tabTitle}>✔ Enviar Mochocoin</Text>
-              
+
               <View style={styles.inputContainer}>
                 <Text style={styles.inputLabel}>Destinatario</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Correo directo rico o @usuario"
-                  placeholderTextColor="#A0A0A0"
+                  placeholder="Correo o @usuario"
+                  placeholderTextColor={isDark ? '#A0A0A0' : '#666'}
                   value={recipient}
                   onChangeText={setRecipient}
                 />
               </View>
-              
+
               <View style={styles.inputContainer}>
                 <Text style={styles.inputLabel}>Cantidad</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="0,00"
-                  placeholderTextColor="#A0A0A0"
+                  placeholderTextColor={isDark ? '#A0A0A0' : '#666'}
                   keyboardType="numeric"
                   value={sendAmount}
                   onChangeText={setSendAmount}
                 />
               </View>
-              
+
               <View style={styles.inputContainer}>
                 <Text style={styles.inputLabel}>Nota (Opcional)</Text>
                 <TextInput
                   style={[styles.input, styles.noteInput]}
                   placeholder="Agregar una nota..."
-                  placeholderTextColor="#A0A0A0"
+                  placeholderTextColor={isDark ? '#A0A0A0' : '#666'}
                   multiline
                   numberOfLines={3}
                   value={note}
@@ -180,17 +139,14 @@ const TransactionScreen = () => {
             </View>
           )}
         </ScrollView>
-        
-        {/* Botón de acción */}
-        <TouchableOpacity 
+
+        <TouchableOpacity
           style={[styles.actionButton, !(buyAmount || sellAmount || sendAmount) && styles.disabledButton]}
           onPress={handleTransaction}
           disabled={!(buyAmount || sellAmount || sendAmount)}
         >
           <Text style={styles.actionButtonText}>
-            {activeTab === 'Comprar' && 'Comprar Mochocoin'}
-            {activeTab === 'Vender' && 'Vender Mochocoin'}
-            {activeTab === 'Enviar' && 'Enviar Mochocoin'}
+            {activeTab} Mochocoin
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -198,29 +154,21 @@ const TransactionScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (isDark) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
-    padding: 16,
+    backgroundColor: isDark ? '#121212' : '#F9F9F9',
+    padding: 20,
+    paddingTop: 30,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  time: {
-    color: '#A0A0A0',
-    fontSize: 16,
-  },
+  header: { marginBottom: 30 },
   title: {
-    color: '#FFFFFF',
     fontSize: 24,
     fontWeight: 'bold',
+    color: isDark ? '#FFFFFF' : '#000000',
   },
   balanceContainer: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: isDark ? '#1E1E1E' : '#EAEAEA',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -230,14 +178,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   balanceAmount: {
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000',
     fontSize: 32,
     fontWeight: 'bold',
     marginTop: 5,
   },
   tabsContainer: {
     flexDirection: 'row',
-    backgroundColor: '#1E1E1E',
+    backgroundColor: isDark ? '#1E1E1E' : '#E0E0E0',
     borderRadius: 12,
     marginBottom: 20,
   },
@@ -258,17 +206,15 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: '#FFFFFF',
   },
-  contentContainer: {
-    flex: 1,
-  },
+  contentContainer: { flex: 1 },
   tabContent: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,
   },
   tabTitle: {
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000000',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
@@ -278,24 +224,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
   },
-  balanceInfo: {
-    color: '#A0A0A0',
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
+  inputContainer: { marginBottom: 20 },
   inputLabel: {
     color: '#A0A0A0',
     fontSize: 16,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#2D2D2D',
+    backgroundColor: isDark ? '#2D2D2D' : '#F2F2F2',
     borderRadius: 10,
     padding: 16,
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000000',
     fontSize: 18,
   },
   noteInput: {
@@ -303,10 +242,10 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   banksTitle: {
-    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15,
+    color: isDark ? '#FFFFFF' : '#000000',
+    marginBottom: 10,
   },
   banksGrid: {
     flexDirection: 'row',
@@ -315,13 +254,13 @@ const styles = StyleSheet.create({
   },
   bankCard: {
     width: '48%',
-    backgroundColor: '#2D2D2D',
+    backgroundColor: isDark ? '#2D2D2D' : '#EFEFEF',
     borderRadius: 10,
     padding: 16,
     marginBottom: 15,
   },
   bankName: {
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000000',
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,

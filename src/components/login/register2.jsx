@@ -24,10 +24,10 @@ const RegisterScreen = ({ navigation }) => {
       text: '#000000',
       inputBg: '#FFFFFF',
       inputBorder: '#CCCCCC',
-      buttonBg: '#007AFF',
+      buttonBg: '#F59E0B',
       buttonText: '#FFFFFF',
       secondaryText: '#666666',
-      linkText: '#007AFF',
+      linkText: '#F59E0B',
       cardBg: '#F5F5F5'
     },
     dark: {
@@ -35,10 +35,10 @@ const RegisterScreen = ({ navigation }) => {
       text: '#FFFFFF',
       inputBg: '#1E1E1E',
       inputBorder: '#333333',
-      buttonBg: '#0A84FF',
+      buttonBg: '#F59E0B',
       buttonText: '#FFFFFF',
       secondaryText: '#AAAAAA',
-      linkText: '#64B5F6',
+      linkText: '#F59E0B',
       cardBg: '#1E1E1E'
     }
   };
@@ -101,7 +101,7 @@ const RegisterScreen = ({ navigation }) => {
             placeholder="+58-XXX-XXXX"
             placeholderTextColor={theme.secondaryText}
             keyboardType="phone-pad"
-            value={phone}
+            value={Number}
             onChangeText={handlePhoneChange}
           />
         </View>
@@ -122,7 +122,7 @@ const RegisterScreen = ({ navigation }) => {
 
         <TouchableOpacity 
           style={styles.nextButton} 
-          onPress={handleNext}
+          onPress={() => navigation.navigate('Register3')}
         >
           <Text style={styles.nextButtonText}>Siguiente</Text>
         </TouchableOpacity>
@@ -146,19 +146,22 @@ const createStyles = (theme) => StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    padding: 25,
+    padding: 90,
     flexGrow: 1,
   },
   progress: {
-    fontSize: 14,
+    fontSize: 30,
     color: theme.secondaryText,
-    marginBottom: 5,
+    marginBottom: 40,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,
     color: theme.text,
+    alignSelf: 'center',
   },
   formGroup: {
     marginBottom: 20,

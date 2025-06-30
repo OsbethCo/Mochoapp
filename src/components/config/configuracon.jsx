@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -7,51 +7,53 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  useColorScheme,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
+// Paletas de colores para ambos temas
+const colorPalettes = {
+  dark: {
+    background: '#121212',
+    cardBackground: '#1E1E1E',
+    text: '#FFFFFF',
+    secondaryText: '#A0A0A0',
+    border: '#2D2D2D',
+    positive: '#4CAF50',
+    logoutButton: '#1E1E1E',
+    logoutText: '#F44336',
+    switchTrack: { false: '#767577', true: '#4CAF50' },
+    switchThumb: '#f4f3f4',
+    statusBar: 'light-content',
+  },
+  light: {
+    background: '#F5F5F5',
+    cardBackground: '#FFFFFF',
+    text: '#333333',
+    secondaryText: '#757575',
+    border: '#E0E0E0',
+    positive: '#388E3C',
+    logoutButton: '#FFFFFF',
+    logoutText: '#F44336',
+    switchTrack: { false: '#767577', true: '#388E3C' },
+    switchThumb: '#f4f3f4',
+    statusBar: 'dark-content',
+  }
+};
+
 const UserSettingsScreen = () => {
-  const [theme, setTheme] = useState('dark');
+  const systemTheme = useColorScheme();
+  const [theme, setTheme] = useState(systemTheme);
   const [notificationEnabled, setNotificationEnabled] = useState(true);
   const navigation = useNavigation();
+
+  const palette = colorPalettes[theme] || colorPalettes.dark;
+  const styles = useMemo(() => createStyles(palette), [palette]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
-
-  const themeStyles =
-    theme === 'light'
-      ? {
-          container: { backgroundColor: '#F8F8F8' },
-          header: { backgroundColor: '#FFFFFF' },
-          time: { color: '#666666' },
-          title: { color: '#000000' },
-          section: { backgroundColor: '#FFFFFF' },
-          sectionTitle: { color: '#666666' },
-          settingItem: { borderBottomColor: '#F0F0F0' },
-          settingText: { color: '#333333' },
-          logoutButton: { backgroundColor: '#FFFFFF' },
-          logoutText: { color: '#F44336' },
-          switchTrack: { false: '#767577', true: '#4CAF50' },
-          switchThumb: '#f4f3f4',
-          statusBar: 'dark-content',
-        }
-      : {
-          container: { backgroundColor: '#121212' },
-          header: { backgroundColor: '#121212' },
-          time: { color: '#A0A0A0' },
-          title: { color: '#FFFFFF' },
-          section: { backgroundColor: '#1E1E1E' },
-          sectionTitle: { color: '#A0A0A0' },
-          settingItem: { borderBottomColor: '#2D2D2D' },
-          settingText: { color: '#FFFFFF' },
-          logoutButton: { backgroundColor: '#1E1E1E' },
-          logoutText: { color: '#F44336' },
-          switchTrack: { false: '#767577', true: '#4CAF50' },
-          switchThumb: '#f4f3f4',
-          statusBar: 'light-content',
-        };
 
   const settings = [
     {
@@ -72,13 +74,13 @@ const UserSettingsScreen = () => {
       id: 3,
       name: 'Idioma',
       type: 'arrow',
-      action: () => navigation.navigate('IdiomaScreen'),
+      action: () => navigation.navigate('idiomas'),
     },
     {
       id: 4,
       name: 'Privacidad',
       type: 'arrow',
-      action: () => navigation.navigate('PrivacidadScreen'),
+      action: () => navigation.navigate('privacidad'),
     },
   ];
 
@@ -87,36 +89,34 @@ const UserSettingsScreen = () => {
       id: 5,
       name: 'Ayuda y soporte',
       type: 'arrow',
-      action: () => navigation.navigate('CentroDeAyudaScreen'),
+      action: () => navigation.navigate('ayuda'),
     },
   ];
 
   return (
-    <View style={[styles.container, themeStyles.container]}>
+    <View style={[styles.container, { backgroundColor: palette.background }]}>
       <StatusBar
-        barStyle={themeStyles.statusBar}
-        backgroundColor={themeStyles.header.backgroundColor}
+        barStyle={palette.statusBar}
+        backgroundColor={palette.background}
       />
 
-      <Text style={[styles.title, themeStyles.title]}>Usuario</Text>
-
       <ScrollView style={styles.content}>
-        <View style={[styles.section, themeStyles.section]}>
-          <Text style={[styles.sectionTitle, themeStyles.sectionTitle]}>Configuración</Text>
+        <View style={[styles.section, { backgroundColor: palette.cardBackground }]}>
+          <Text style={[styles.sectionTitle, { color: palette.secondaryText }]}>Configuración</Text>
 
           {settings.map((item) => (
             <TouchableOpacity
               key={item.id}
-              style={[styles.settingItem, themeStyles.settingItem]}
+              style={[styles.settingItem, { borderBottomColor: palette.border }]}
               onPress={item.action}
             >
-              <Text style={[styles.settingText, themeStyles.settingText]}>{item.name}</Text>
+              <Text style={[styles.settingText, { color: palette.text }]}>{item.name}</Text>
 
               {item.type === 'switch' ? (
                 <Switch
-                  trackColor={themeStyles.switchTrack}
-                  thumbColor={themeStyles.switchThumb}
-                  ios_backgroundColor="#3e3e3e"
+                  trackColor={palette.switchTrack}
+                  thumbColor={palette.switchThumb}
+                  ios_backgroundColor={palette.cardBackground}
                   onValueChange={item.action}
                   value={item.value}
                 />
@@ -124,51 +124,46 @@ const UserSettingsScreen = () => {
                 <Ionicons
                   name="chevron-forward"
                   size={24}
-                  color={theme === 'dark' ? '#A0A0A0' : '#666666'}
+                  color={palette.secondaryText}
                 />
               )}
             </TouchableOpacity>
           ))}
         </View>
 
-        <View style={[styles.section, themeStyles.section]}>
-          <Text style={[styles.sectionTitle, themeStyles.sectionTitle]}>Soporte</Text>
+        <View style={[styles.section, { backgroundColor: palette.cardBackground }]}>
+          <Text style={[styles.sectionTitle, { color: palette.secondaryText }]}>Soporte</Text>
           {supportItems.map((item) => (
             <TouchableOpacity
               key={item.id}
-              style={[styles.settingItem, themeStyles.settingItem]}
+              style={[styles.settingItem, { borderBottomColor: palette.border }]}
               onPress={item.action}
             >
-              <Text style={[styles.settingText, themeStyles.settingText]}>{item.name}</Text>
+              <Text style={[styles.settingText, { color: palette.text }]}>{item.name}</Text>
               <Ionicons
                 name="chevron-forward"
                 size={24}
-                color={theme === 'dark' ? '#A0A0A0' : '#666666'}
+                color={palette.secondaryText}
               />
             </TouchableOpacity>
           ))}
         </View>
 
         <TouchableOpacity
-          style={[styles.logoutButton, themeStyles.logoutButton]}
+          style={[styles.logoutButton, { backgroundColor: palette.logoutButton }]}
           onPress={() => alert('Sesión cerrada')}
         >
-          <Text style={[styles.logoutText, themeStyles.logoutText]}>Cerrar sesión</Text>
+          <Text style={[styles.logoutText, { color: palette.logoutText }]}>Cerrar sesión</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (palette) => StyleSheet.create({
   container: {
     flex: 1,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    padding: 20,
-    paddingBottom: 30,
+    paddingTop: 20,
   },
   content: {
     paddingHorizontal: 20,
@@ -185,6 +180,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 10,
     borderBottomWidth: 1,
+    borderBottomColor: palette.border,
   },
   settingItem: {
     flexDirection: 'row',
@@ -209,4 +205,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserSettingsScreen;
+export default UserSettingsScreen

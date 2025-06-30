@@ -1,10 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, StatusBar } from 'react-native';
+import { 
+  View, Text, StyleSheet, SafeAreaView, ScrollView, StatusBar, useColorScheme 
+} from 'react-native';
 
-const homescreen = () => {
+const LobbyScreen = () => {
+  const scheme = useColorScheme();
+  const isDarkMode = scheme === 'dark';
+
+  const styles = getStyles(isDarkMode);
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="default" />
+      <StatusBar 
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'} 
+        backgroundColor={isDarkMode ? '#121212' : '#F5F5F5'} 
+      />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Encabezado */}
         <View style={styles.header}>
@@ -56,25 +66,33 @@ const homescreen = () => {
 };
 
 // Componente para ítem de criptomoneda
-const CryptoItem = ({ name, amount, pair, change, isPositive }) => (
-  <View style={styles.cryptoCard}>
-    <View>
-      <Text style={styles.cryptoName}>{name}</Text>
-      <Text style={styles.cryptoPair}>{pair}</Text>
-    </View>
-    <View style={styles.cryptoRight}>
-      <Text style={styles.cryptoAmount}>{amount}</Text>
-      <Text style={[styles.cryptoChange, isPositive ? styles.positive : styles.negative]}>
-        {change}
-      </Text>
-    </View>
-  </View>
-);
+const CryptoItem = ({ name, amount, pair, change, isPositive }) => {
+  const scheme = useColorScheme();
+  const isDarkMode = scheme === 'dark';
+  const styles = getStyles(isDarkMode);
 
-const styles = StyleSheet.create({
+  return (
+    <View style={styles.cryptoCard}>
+      <View>
+        <Text style={styles.cryptoName}>{name}</Text>
+        <Text style={styles.cryptoPair}>{pair}</Text>
+      </View>
+      <View style={styles.cryptoRight}>
+        <Text style={styles.cryptoAmount}>{amount}</Text>
+        <Text style={[styles.cryptoChange, isPositive ? styles.positive : styles.negative]}>
+          {change}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+// Estilos dinámicos según tema
+const getStyles = (isDark) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: isDark ? '#121212' : '#FFFFFF',
+    paddingTop: 20,
   },
   scrollContainer: {
     padding: 20,
@@ -86,25 +104,25 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000000',
   },
   welcome: {
     fontSize: 16,
-    color: '#A0A0A0',
+    color: isDark ? '#A0A0A0' : '#606060',
     marginTop: 5,
   },
   balanceContainer: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: isDark ? '#1E1E1E' : '#F0F0F0',
     borderRadius: 15,
     padding: 20,
     marginBottom: 25,
   },
   balanceLabel: {
-    color: '#A0A0A0',
+    color: isDark ? '#A0A0A0' : '#606060',
     fontSize: 16,
   },
   balanceAmount: {
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000000',
     fontSize: 36,
     fontWeight: 'bold',
     marginTop: 10,
@@ -112,18 +130,18 @@ const styles = StyleSheet.create({
   cryptoCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#1E1E1E',
+    backgroundColor: isDark ? '#1E1E1E' : '#F8F8F8',
     borderRadius: 15,
     padding: 20,
     marginBottom: 15,
   },
   cryptoName: {
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000000',
     fontSize: 18,
     fontWeight: '600',
   },
   cryptoPair: {
-    color: '#A0A0A0',
+    color: isDark ? '#A0A0A0' : '#707070',
     fontSize: 14,
     marginTop: 5,
   },
@@ -131,7 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   cryptoAmount: {
-    color: '#FFFFFF',
+    color: isDark ? '#FFFFFF' : '#000000',
     fontSize: 18,
     fontWeight: '600',
   },
@@ -147,4 +165,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default homescreen;
+export default LobbyScreen;

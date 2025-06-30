@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, useColorScheme, StatusBar, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, useColorScheme, StatusBar, Image,SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const WelcomeScreen = () => {
@@ -10,7 +10,7 @@ const WelcomeScreen = () => {
     light: {
       background: '#F5F5F5',
       text: '#333333',
-      buttonBg: '#4285F4',
+      buttonBg: '#F59E0B',
       buttonText: '#FFFFFF',
       cardBg: '#FFFFFF',
       cardBorder: '#E0E0E0',
@@ -19,7 +19,7 @@ const WelcomeScreen = () => {
     dark: {
       background: '#121212',
       text: '#E0E0E0',
-      buttonBg: '#6200EE',
+      buttonBg: '#F59E0B',
       buttonText: '#FFFFFF',
       cardBg: '#1E1E1E',
       cardBorder: '#333333',
@@ -30,7 +30,7 @@ const WelcomeScreen = () => {
   const theme = colors[colorScheme] || colors.light;
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <StatusBar 
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} 
         backgroundColor={theme.background}
@@ -44,7 +44,7 @@ const WelcomeScreen = () => {
         
         <View style={styles.iconContainer}>
           <Image
-            source={require('../assets/icon.png')}
+            source={require('../icon/icon.png')}
             style={[styles.icon, { tintColor: theme.iconTint }]}
             resizeMode="contain"
           />
@@ -53,7 +53,7 @@ const WelcomeScreen = () => {
         {/* Botón Iniciar sesión */}
         <TouchableOpacity 
           style={[styles.button, { backgroundColor: theme.buttonBg }]}
-          onPress={() => navigation.navigate('LogScreen')}
+          onPress={() => navigation.navigate('LoginScreen')}
           activeOpacity={0.7}
         >
           <Text style={[styles.buttonText, { color: theme.buttonText }]}>Iniciar sesión</Text>
@@ -73,7 +73,7 @@ const WelcomeScreen = () => {
           <Text style={[styles.buttonText, { color: theme.buttonBg }]}>Registrate</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

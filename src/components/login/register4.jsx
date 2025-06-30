@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Para ícono de ojo
 
-const PasswordConfirmationScreen = () => {
+const PasswordConfirmationScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -21,8 +21,8 @@ const PasswordConfirmationScreen = () => {
       return;
     }
 
-    alert('¡Registro exitoso!');
-    // Aquí iría la lógica para enviar los datos al backend
+    alert('¡Registro exitoso!')
+    navigation.navigate('MainTabs');
   };
 
   return (
@@ -80,7 +80,7 @@ const PasswordConfirmationScreen = () => {
         <Text style={styles.registerButtonText}>Registrarse</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginLink}>
+      <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('LoginScreen')}>
         <Text style={styles.loginText}>¿Ya tienes una cuenta? <Text style={styles.loginLinkText}>Inicia sesión</Text></Text>
       </TouchableOpacity>
     </View>
@@ -90,13 +90,15 @@ const PasswordConfirmationScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 25,
+    padding: 90,
     backgroundColor: '#fff',
   },
   progress: {
-    fontSize: 14,
+    fontSize: 30,
     color: '#666',
-    marginBottom: 5,
+    marginBottom: 40,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
   title: {
     fontSize: 24,
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     top: 15,
   },
   registerButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#F59E0B',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   loginLinkText: {
-    color: '#007AFF',
+    color: '#F59E0B',
     fontWeight: 'bold',
   },
 });

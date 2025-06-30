@@ -1,20 +1,57 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image, Dimensions } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { 
+  View, Text, StyleSheet, SafeAreaView, ScrollView, StatusBar, 
+  TouchableOpacity, Image, Dimensions, useColorScheme 
+} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import { useNavigation } from '@react-navigation/native'; // Importación para navegar
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
+// Paletas de colores para ambos temas
+const colorPalettes = {
+  dark: {
+    background: '#121212',
+    cardBackground: '#1E1E1E',
+    text: '#FFFFFF',
+    secondaryText: '#A0A0A0',
+    positive: '#4CAF50',
+    negative: '#F44336',
+    border: '#2D2D2D',
+    tabInactive: '#A0A0A0',
+    chartGrid: 'rgba(255, 255, 255, 0.2)',
+    chartText: '#FFFFFF',
+    chartBackground: '#1E1E1E',
+  },
+  light: {
+    background: '#F5F5F5',
+    cardBackground: '#FFFFFF',
+    text: '#333333',
+    secondaryText: '#757575',
+    positive: '#388E3C',
+    negative: '#D32F2F',
+    border: '#E0E0E0',
+    tabInactive: '#757575',
+    chartGrid: 'rgba(0, 0, 0, 0.2)',
+    chartText: '#333333',
+    chartBackground: '#FFFFFF',
+  }
+};
+
 const PriceScreen = () => {
+  const theme = useColorScheme();
+  const palette = colorPalettes[theme] || colorPalettes.dark;
   const [activeTab, setActiveTab] = useState('Estadísticas');
-  const navigation = useNavigation(); // Hook de navegación
+  const navigation = useNavigation();
+
+  const styles = useMemo(() => createStyles(palette), [palette]);
 
   const chartData = {
     labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
     datasets: [
       {
         data: [4.2, 4.8, 5.1, 5.5, 5.0, 5.5],
-        color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`,
+        color: (opacity = 1) => `rgba(${theme === 'dark' ? '76, 175, 80' : '56, 142, 60'}, ${opacity})`,
         strokeWidth: 2
       }
     ]
@@ -43,7 +80,10 @@ const PriceScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#121212" />
+      <StatusBar 
+        barStyle={theme === 'dark' ? "light-content" : "dark-content"} 
+        backgroundColor={palette.background} 
+      />
       
       <View style={styles.header}>
         <View style={styles.titleContainer}>
@@ -60,9 +100,9 @@ const PriceScreen = () => {
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.buyButton}
-          onPress={() => navigation.navigate('BuyMochocoin')}
+          onPress={() => navigation.navigate('BuyScreen')}
         >
-          <Text style={styles.buyButtonText}>Comprar</Text>
+          <Text style={styles.buyButtonText}>+ Comprar</Text>
         </TouchableOpacity>
       </View>
 
@@ -95,24 +135,34 @@ const PriceScreen = () => {
 
             <View style={styles.chartContainer}>
               <Text style={styles.chartTitle}>Rendimiento de MHC</Text>
-              <LineChart
-                data={chartData}
-                width={width - 40}
-                height={220}
-                yAxisLabel="Bs "
-                chartConfig={{
-                  backgroundColor: '#1E1E1E',
-                  backgroundGradientFrom: '#1E1E1E',
-                  backgroundGradientTo: '#1E1E1E',
-                  decimalPlaces: 2,
-                  color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`,
-                  labelColor: () => '#FFFFFF',
-                  style: { borderRadius: 16 },
-                  propsForDots: { r: "4", strokeWidth: "2", stroke: "#4CAF50" },
-                }}
-                bezier
-                style={{ marginVertical: 8, borderRadius: 16 }}
-              />
+                  <LineChart
+                    data={chartData}
+                    width={width - 40}
+                    height={220}
+                    yAxisLabel="Bs "
+                    chartConfig={{
+                      backgroundColor: palette.chartBackground,
+                      backgroundGradientFrom: palette.chartBackground,
+                      backgroundGradientTo: palette.chartBackground,
+                      decimalPlaces: 2,
+                      color: (opacity = 1) => `rgba(${theme === 'dark' ? '76, 175, 80' : '56, 142, 60'}, ${opacity})`,
+                      labelColor: () => palette.chartText,
+                      style: { borderRadius: 16 },
+                      propsForDots: { 
+                        r: "4", 
+                        strokeWidth: "2", 
+                        stroke: theme === 'dark' ? "#4CAF50" : "#388E3C" 
+                      },
+                      propsForLabels: {
+                        fontSize: 10
+                      },
+                      propsForBackgroundLines: {
+                        stroke: palette.chartGrid
+                      }
+                    }}
+                    bezier
+                    style={{ marginVertical: 5, borderRadius: 16, marginHorizontal: -20 }}
+                  />
             </View>
 
             <View style={styles.performanceContainer}>
@@ -170,28 +220,29 @@ const PriceScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (palette) => StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#121212',
+    backgroundColor: palette.background,
+    paddingTop: 20,
   },
   header: {
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
     padding: 20, 
-    paddingBottom: 10
+    paddingBottom: 20
   },
   titleContainer: {
     flexDirection: 'column' 
   },
   title: {
-    color: '#FFFFFF', 
+    color: palette.text, 
     fontSize: 24, 
     fontWeight: 'bold'
   },
   subtitle: { 
-    color: '#A0A0A0', 
+    color: palette.secondaryText, 
     fontSize: 16, 
     marginTop: 4
   },
@@ -201,30 +252,32 @@ const styles = StyleSheet.create({
   icon: { 
     width: 24, 
     height: 24, 
-    tintColor: '#FFFFFF'
+    tintColor: palette.text
   },
   iconMargin: { 
     marginLeft: 15
   },
   buyButton: { 
-    backgroundColor: '#4CAF50', 
+    backgroundColor: palette.positive, 
     borderRadius: 8, 
     paddingVertical: 12, 
-    paddingHorizontal: 20
+    paddingHorizontal: 25,
   },
   buyButtonText: { 
     color: '#FFFFFF', 
-    fontSize: 16, 
-    fontWeight: 'bold'
+    fontSize: 18, 
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   tabsContainer: { 
     flexDirection: 'row', 
-    backgroundColor: '#1E1E1E', 
+    backgroundColor: palette.cardBackground, 
     borderRadius: 12, 
     marginHorizontal: 20, 
     marginBottom: 20, 
     overflow: 'hidden'
   },
+
   tab: { 
     flex: 1, 
     paddingVertical: 14, 
@@ -234,7 +287,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4CAF50'
   },
   tabText: { 
-    color: '#A0A0A0',
+    color: palette.tabInactive,
     fontSize: 14,
     fontWeight: 'bold'
   },
@@ -246,24 +299,21 @@ const styles = StyleSheet.create({
     paddingBottom: 30
   },
   priceCard: { 
-    backgroundColor: '#1E1E1E',
+    backgroundColor: palette.cardBackground,
     borderRadius: 16,
     padding: 20, 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
     marginBottom: 20
   },
   priceInfo: { 
     flex: 1
   },
   priceLabel: { 
-    color: '#A0A0A0', 
+    color: palette.secondaryText, 
     fontSize: 16, 
     marginBottom: 5
   },
   priceValue: { 
-    color: '#FFFFFF', 
+    color: palette.text, 
     fontSize: 36, 
     fontWeight: 'bold', 
     marginBottom: 5
@@ -272,34 +322,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   positiveChange: { 
-    color: '#4CAF50', 
+    color: palette.positive, 
     fontSize: 16, 
     fontWeight: 'bold', 
     marginRight: 15
   },
   chartContainer: { 
-    backgroundColor: '#1E1E1E', 
+    backgroundColor: palette.cardBackground, 
     borderRadius: 16, 
     padding: 20, 
     marginBottom: 20
   },
   chartTitle: { 
-    color: '#FFFFFF', 
+    color: palette.text, 
     fontSize: 18, 
     fontWeight: 'bold', 
     marginBottom: 10
   },
   performanceContainer: { 
-    backgroundColor: '#1E1E1E', 
+    backgroundColor: palette.cardBackground, 
     borderRadius: 16, 
     padding: 20, 
     marginBottom: 20
-  },
-  sectionTitle: { 
-    color: '#FFFFFF', 
-    fontSize: 18, 
-    fontWeight: 'bold', 
-    marginBottom: 15
   },
   performanceGrid: { 
     flexDirection: 'row', 
@@ -308,32 +352,7 @@ const styles = StyleSheet.create({
   },
   performanceItem: { 
     width: '48%', 
-    marginBottom: 15 },
-  performancePeriod: { 
-    color: '#A0A0A0', 
-    fontSize: 14
-  },
-  performanceValue: { 
-    color: '#4CAF50', 
-    fontSize: 16, 
-    fontWeight: 'bold'
-  },
-  cryptoContainer: { 
-    backgroundColor: '#1E1E1E', 
-    borderRadius: 16, 
-    padding: 20
-  },
-  cryptoCard: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    paddingVertical: 15, 
-    borderBottomWidth: 1, 
-    borderBottomColor: '#2D2D2D'
-  },
-  cryptoName: { 
-    color: '#FFFFFF', 
-    fontSize: 16, 
-    fontWeight: '600'
+    marginBottom: 15
   },
   cryptoSymbol: { 
     color: '#A0A0A0', 
@@ -342,60 +361,96 @@ const styles = StyleSheet.create({
   cryptoRight: { 
     alignItems: 'flex-end'
   },
-  cryptoPrice: { 
-    color: '#FFFFFF', 
-    fontSize: 16, 
-    fontWeight: '600'
-  },
   cryptoChange: { 
     fontSize: 14
-  },
-  positive: { 
-    color: '#4CAF50'
-  },
-  negative: { 
-    color: '#F44336'
   },
   newsContainer: { 
     backgroundColor: '#1E1E1E', 
     borderRadius: 16, 
     padding: 20
   },
-  newsCard: { 
-    paddingVertical: 15
-  },
-  newsTitle: { 
-    color: '#FFFFFF', 
-    fontSize: 18, 
-    fontWeight: '600', 
-    marginBottom: 5
-  },
-  newsTime: { 
-    color: '#A0A0A0', 
-    fontSize: 14
-  },
   infoContainer: { 
     backgroundColor: '#1E1E1E', 
     borderRadius: 16, 
     padding: 20
-  },
-  infoTitle: { 
-    color: '#FFFFFF', 
-    fontSize: 22, 
-    fontWeight: 'bold', 
-    marginBottom: 15
-  },
-  infoText: { 
-    color: '#E0E0E0', 
-    fontSize: 16, 
-    lineHeight: 24, 
-    marginBottom: 20
   },
   logo: { 
     width: 150, 
     height: 150, 
     alignSelf: 'center', 
     marginTop: 20 
+  },
+  sectionTitle: { 
+    color: palette.text, 
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    marginBottom: 15
+  },
+  performancePeriod: { 
+    color: palette.secondaryText, 
+    fontSize: 14
+  },
+  performanceValue: { 
+    color: palette.positive, 
+    fontSize: 16, 
+    fontWeight: 'bold'
+  },
+  cryptoContainer: { 
+    backgroundColor: palette.cardBackground, 
+    borderRadius: 16, 
+    padding: 20
+  },
+  cryptoCard: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingVertical: 15, 
+    borderBottomWidth: 1, 
+    borderBottomColor: palette.border
+  },
+  cryptoName: { 
+    color: palette.text, 
+    fontSize: 16, 
+    fontWeight: '600'
+  },
+  cryptoSymbol: { 
+    color: palette.secondaryText, 
+    fontSize: 14
+  },
+  cryptoPrice: { 
+    color: palette.text, 
+    fontSize: 16, 
+    fontWeight: '600'
+  },
+  positive: { 
+    color: palette.positive
+  },
+  negative: { 
+    color: palette.negative
+  },
+  newsCard: { 
+    paddingVertical: 15
+  },
+  newsTitle: { 
+    color: palette.text, 
+    fontSize: 18, 
+    fontWeight: '600', 
+    marginBottom: 5
+  },
+  newsTime: { 
+    color: palette.secondaryText, 
+    fontSize: 14
+  },
+  infoTitle: { 
+    color: palette.text, 
+    fontSize: 22, 
+    fontWeight: 'bold', 
+    marginBottom: 15
+  },
+  infoText: { 
+    color: palette.text, 
+    fontSize: 16, 
+    lineHeight: 24, 
+    marginBottom: 20
   },
 });
 

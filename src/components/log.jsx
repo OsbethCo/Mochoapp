@@ -12,7 +12,7 @@ const LogScreen = () => {
     light: {
       background: '#F5F5F5',
       text: '#333333',
-      buttonBg: '#4285F4',
+      buttonBg: '#F59E0B',
       buttonText: '#FFFFFF',
       inputBg: '#FFFFFF',
       inputBorder: '#CCCCCC',
@@ -36,8 +36,7 @@ const LogScreen = () => {
   const theme = colors[colorScheme] || colors.light;
 
   const handleLogin = () => {
-    // Aquí puedes validar credenciales si lo necesitas
-    navigation.navigate('HomeScreen');
+    navigation.navigate('MainTabs');
   };
 
   const handleForgotPassword = () => {
@@ -56,7 +55,7 @@ const LogScreen = () => {
 
         <View style={styles.iconContainer}>
           <Image
-            source={require('../assets/icon.png')}
+            source={require('../icon/icon.png')}
             style={[styles.icon, { tintColor: theme.iconTint }]}
             resizeMode="contain"
           />

@@ -28,7 +28,7 @@ const PasswordConfirmScreen = () => {
   const handleConfirm = () => {
     if (newPassword && confirmPassword && newPassword === confirmPassword) {
       Alert.alert('Éxito', 'Contraseña confirmada con éxito');
-      navigation.navigate('HomeScreen');
+      navigation.navigate('MainTabs');
     } else {
       Alert.alert('Error', 'Las contraseñas no coinciden');
     }
@@ -83,7 +83,7 @@ const PasswordConfirmScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 25,
+    padding: 60,
     justifyContent: 'center',
   },
   header: {
