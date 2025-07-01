@@ -77,7 +77,7 @@ const MainTabs = () => {
 };
 
 // Stack principal de la app (pantallas de inicio, registro, recuperación y la navegación principal con tabs)
-const AppNavigator = () => {
+const Navigator = () => {
   const scheme = useColorScheme();
 
   return (
@@ -113,4 +113,4 @@ const AppNavigator = () => {
   );
 };
 
-export default AppNavigator;
+export default Navigator;
