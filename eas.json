@@ -10,11 +10,25 @@
     },
     "preview": {
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease",
+        "env": {
+          "ORG_GRADLE_PROJECT_androidxAnnotationVersion": "1.7.0",
+          "ORG_GRADLE_PROJECT_androidxCoreVersion": "1.12.0",
+          "EXPO_ANDROID_COMPILE_SDK_VERSION": "34",
+          "EXPO_ANDROID_TARGET_SDK_VERSION": "34",
+          "EXPO_ANDROID_BUILD_TOOLS_VERSION": "34.0.0"
+        }
+      },
+      "env": {
+        "USE_FABRIC": "1"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "android": {
+        "gradleCommand": ":app:bundleRelease"
+      }
     }
   },
   "submit": {
